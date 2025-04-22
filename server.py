@@ -2,6 +2,12 @@ import http.server
 import urllib.parse
 
 # In-memory "database" (a simple dictionary to simulate a user store)
+'''
+---------------------------------------------------------------------------------
+A02:2021-Cryptographic Failures
+Storing a Plain text password in the code
+---------------------------------------------------------------------------------
+'''
 users_db = {
     'admin': 'password123'
 }
@@ -9,6 +15,12 @@ users_db = {
 # Basic function to handle SQL Injection vulnerability
 def check_login(username, password):
     # Simulating an SQL query, prone to injection
+    '''
+    ---------------------------------------------------------------------------------
+    A03:2021-Injection
+    Use parameterization for queries with untrusted input
+    ---------------------------------------------------------------------------------
+    '''
     query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
     
     # "Checking" the database (in reality, just a dictionary lookup)
@@ -43,6 +55,12 @@ class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             post_params = urllib.parse.parse_qs(post_data.decode())
 
+            '''
+            ---------------------------------------------------------------------------------
+            A03:2021-Injection
+            User input unsanitized enabling cross-site scripting attacks
+            ---------------------------------------------------------------------------------
+            '''
             username = post_params.get('username', [''])[0]
             password = post_params.get('password', [''])[0]
 
